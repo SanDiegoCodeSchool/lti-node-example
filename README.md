@@ -1,2 +1,2 @@
 # lti-node-example
-Module for building an LTI Tool Provider
+Example of an LTI Tool Provider
