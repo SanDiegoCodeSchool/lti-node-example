@@ -28,8 +28,11 @@ npm install -g localtunnel
 
 The Example Tool can be dropped into a Platform so that you can experience the Library's usage in a live environment.  This demo uses the Moodle's sandbox to Register the Tool with the Moodle Platform. To do this:
 
-1. Login to https://demo.moodle.net with credentials admin / sandbox
-
+1. Login to https://demo.moodle.net with credentials:
+  ```
+  Username: admin 
+  Password: sandbox
+ ```
 2. Under `Site Administration`, go to the `Plugins` tab and click `External Tool->Manage Tools`
 
 3. Click `configure a tool manually` and, at minimum, add:
