@@ -15,14 +15,12 @@ To use this repo, clone it to your local machine and run:
 npm install
 ```
 ## WARNING: 
-DO not perform an npm start until prompted to do so in step 6. If you do, you will need to clear your database.
+DO not perform an npm start until prompted to do so in step A6 If you do, you will need to clear the TESTLTI database in your local mongo DB instance.
 
 You will also need MongoDB and localtunnel installed.  Instructions to install MongoDB can be found here:
 
 * MacOS - use homebrew: https://docs.mongodb.com/master/tutorial/install-mongodb-on-os-x/
 * Windows - use the installer from here: https://docs.mongodb.com/master/tutorial/install-mongodb-on-windows/
-
-NOTE: have MongoDB up and running before you continue!
 
 Install localtunnel by running:
 ```
@@ -46,23 +44,25 @@ The Example Tool can be dropped into a Platform so that you can experience the L
 - Mark the tool as a 'LTI1.3' Tool
 - Initiate Login URL - https://localtunnelname.localtunnel.me/oidc
 - Redirection URIs - https://localtunnelname.localtunnel.me/project/submit
-- Enable Assignment and Grade Services
-- Enable sharing of launcher's name
-- Choose 'Always' Accept grades from the Tool 
+- Enable Assignment and Grade Services under the services tab
+- Enable sharing of launcher's name under the privacy tab
+- Choose 'Always' Accept grades from the Tool under the privacy tab
 
-4. After clicking `Save changes`, click the Menu icon for the Tool you just added and make note of the Tool Configuration Details
-- Replace the Client ID from this information to the server.js file on line 58. Additionally, replace line 61 with your localtunnel URL + "/project/submit"
+4. After clicking `Save changes`, click the Menu icon (icon to the left of the gear icon) for the Tool you just added and make note of the Tool Configuration Details
+- Copy the Client ID from this information and paste it into the server.js file of your code on line 58. Additionally, replace line 61 with your localtunnel URL + "/project/submit"
 
-5. Back in the Moodle sandbox, click `Dashboard` and click any of the demo courses.  Use the Gear icon to `Turn editing on`.  You will then be able to `Add an Activty or Resource` for an `External Tool`.  Simply give it a name and select the Tool you added above from the drop down box for `Preconfigured tool`.  Click `Save and return to course`.
+5. Back in the Moodle sandbox, click `Dashboard` and click any of the demo courses.  Use the Gear icon onthe top right of the webpage to `Turn editing on`.  You will then be able to `Add an Activty or Resource` for an `External Tool`.  Simply give it a name and select the Tool you added above from the drop down box for `Preconfigured tool`.  Click `Save and return to course`.
 
-6. Run localtunnel, MongoDB, and your server in separate terminals:
+6. In separate terminals, run localtunnel, MongoDB, and your server :
 ```
 lt --port 3000 --subdomain localtunnelname
 mongod
 npm start
 ```
 
-7. In the upper right corner of the Moodle sandbox, switch your role to Student, and then click on the Tool you just added to the course you chose.  The Example Tool will now display.
+7. After you have started the server, the command line should log that your platform has been registered. Before continuing, open a new tab in your browser and navigate to your local tunnel url + "/pubickey/moodle". This webpage produces a public key that you MUST add to your previously configured tool settings under the public key input. **BE SURE TO COPY EVERYTHING INBETWEEN THE QUOTATIONS ON THIS WEBPAGE.**
+
+8. In the upper right corner of the Moodle sandbox, switch your role to Student, and then click on the Tool you just added to the course you chose.  The Example Tool will now display.
  
 The Example Tool is a Project Submission Grader.  When the Tool is launched, the student will see a form where they can enter a Github URL and a Heroku and/or Now URL.  After the student enters the URLs of their project and clicks Submit, the Tool will grade the project. 
 
