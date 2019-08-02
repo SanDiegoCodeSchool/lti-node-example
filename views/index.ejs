@@ -1,0 +1,216 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Pied Piper LTI1.3 Library Example</title>
+</head>
+
+<body class='bg-light'>
+  <div class='my-3 p-5'>
+    <h1 class='mb-5 text-center '>LTI 1.3 Library Usage Example</h1>
+    <h4 class="mb-5 text-center ">See the Pied Piper LTI 1.3 Library in action. A Grader Module is used as the Tool example.</h4>
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-md-6 card'>
+          <div id='step1' class='card-header bg-success border-success p-1'>
+            1) LMS Launches OIDC Login Flow
+          </div>
+          <div class='card-body'>
+            The OIDC login flow is initiated when a student clicks a Tool link in their course. When the student clicks
+              the link, the LMS sends a GET or POST request to the Tool.</p>
+            <p>Simulate this by clicking: <button id='init-login' class='bg-light mt-3 border rounded'>Initiate Tool from LMS</button></p>
+            <div id='login-code' class='card invisible'>
+              <h6 class='card-header border-success p-1'>LMS Generated Login Request</h6>
+              <code>{
+                  iss: 'https://demo.moodle.net',<br>
+                  target_link_uri: 'https://node-lti-v1p3.herokuapp.com/',<br>
+                  login_hint: '9',<br>
+                  lti_message_hint: '377'
+                }
+              </code>  
+            </div>
+          </div>
+        </div>
+        <div class='col-md-6 card'>
+          <div id='step2' class='card-header border-success p-1'>
+            2) LTI1.3 Library Validates Login Request
+          </div>
+          <div class='card-body'>
+            The LTI1.3 Library validates the login request by ensuring the Issuer has registered with the Tool and the login 
+              is properly formatted.  If so, the LTI1.3 Library sends a Login Response to the LMS's OIDC Authorization endpoint.</p>
+            <p>Simulate this by clicking: 
+            <button id='gen-response' class='bg-light mt-3 border rounded'>Generate Login Response</button></p>
+            <div id='oidc-card' class='card invisible'>
+              <h6 class='card-header border-success p-1'>Library Generated Login Response</h6>
+              <code id='oidc' class='text-left'></code>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='row mt-4'>
+        <div class='col-md-9 card'>
+          <div id='step3' class='card-header border-success p-1'>
+            3) LMS Sends Launch Request
+          </div>
+          <div class='card-body'>
+            <p>The LMS validates the Login Response, and if valid sends a Launch Request. This flow is all transparent to the student.</p>
+            <p>Simulate this by clicking: 
+            <button id='send-launch-req' class='bg-light mt-3 rounded'>Send Launch Tool Request</button></p>
+            <div id='launch-req' id='oidc-card' class='card invisible'>
+              <h6  class='card-header border-success p-1 invisible'>LMS Generated Launch Request</h6>
+              <p>The Launch Request received is in the following format (id_token is truncated for space)... </p>
+              <code id='launch-req-token' class='text-left'>
+              { id_token: 'eyJ0eXAiOiJKV1QiLCJhbGci...',
+               state: 'qb9k4xSFfQMFQWoEKZTXMehVaaKH1y' }
+              </code>
+              <p class='mt-3'>...and the Library decodes and validates it:</p>
+              <code id='launch-req-code' class='text-left'></code>
+            </div>
+          </div>
+        </div>
+        <div class='col-md-3 card'>
+            <div id='step4' class='card-header border-success p-1'>
+              4) LTI1.3 Library Launches Tool
+            </div>
+            <div class='card-body'>
+              <p>The LTI1.3 Library authenticates and validates the Launch Request. If a Valid Launch Request, the Tool will be
+                launched.</p>
+              <p>Simulate this by clicking: <button id='launch-tool' class='bg-light mt-3 rounded'>Launch Tool</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class='text-center'>
+    <p>Additionally, the Library supports OAuth 2.0 with JWT.  Generate a JSON Web Token by clicking:
+    <button id='get-token' class='mt-5 bg-warning rounded'>Get Token</button></p>
+  </div>
+  <div class='text-center card mb-5 my-5'>
+    <h6 class='card-header border-warning'>Your Token</h6>
+    <p id='token'>Press 'Get Token' to generate a token!</p>
+  </div>
+</body>
+
+<script>
+  function turn_all_cards_off() {
+    document.getElementById('step1').className = 'card-header border-success p-1'
+    document.getElementById('step2').className = 'card-header border-success p-1'
+    document.getElementById('step3').className = 'card-header border-success p-1'
+    document.getElementById('step4').className = 'card-header border-success p-1'
+  }
+
+  document.getElementById('get-token').addEventListener('click', async _ => {
+    fetch('http://localhost:3000/oauth2/token', {
+      'method': 'post',
+      'headers': { 'content-type': 'application/json' },
+      'body': JSON.stringify({
+        'grant_type': 'client_credentials',
+        'client_id': 'uuYLGWBmhhuZvBf',
+        'client_secret': '-----BEGIN RSA PRIVATE KEY-----\nMIIEpQIBAAKCAQEAy5CSU1VCiTdrRJnYNXoO91NE5NZYr1tyjsbvghaoabyzm4D9sp40QHReFb1OBZZZAwJYc9o+LRYU83/o5mDwlzyoYpz63wzNbXLF6kYK3JqP93mMXKJAs8q1EThuZCqc4RZAFI/QhMmqovLpKnEHSl8XPgxZOch2vQa14+3XaZdAgbUxfT6x08mFg71X/oNhNxhShiSLJ6xtKxC4+IDtAOlveIdvlfC50LVcMBbZahSo+j/MBVxdDDgTnMpxM3NsI+9aib9uzBjR4Lf43+OCrEOabg9nQbCZ2F2SAr/2+Ubl3ZJe/US4jkhfTbSClQZuSVNmNM+lMGxgXsZiCbzf1QIDAQABAoIBAQCQJRxoY/xMe/C6UBI4s+i7G7yyKlH8Qk4ZaicZQAAbd6LbH3kGLV6ksYIZ9MW10SPQrK2Dw+u5M2S8lDuQPt6+yRYXVj+TCFbDBL2+ycBRPCVrwScyRTZ52bVjr0kEJuSVwpK3vKqUDNWGs2mGQyk9cZ5cspPQBfKGoaTU9ItP2aXQzMY/+KLl46gmu5SK2igEaNIsNi1k41yRw7Sa7RDIH9jdWHlcl7WKxjHlIv21E9p2RUH8vqvNeH8joVH3IyS1w5F6mxaQrHjRp9RlXAkrIrDttn7bJ3jE55AxgvoYC8P3tV+wq/uqCJE+smfkH/umi2CPHzE0OMyQB7n9REh1AoGBAPKE9yZChjOPsf0cTQwnbZEIMZV4K3r+xYDV2kDa1NfEFooo9jsg34n/OMyC6xTgGYE98/10id/unAMNsLlX4PAelc3doBNRUt/bVFoNVHaw2JsghJ6qXm8Uj8rQgcXVOMhXoAQusUOyeL+2PyBhPt193EpNqYpKARx0Zi3waG7bAoGBANbhSLAAGpvaZPulLJ0pI1AF2sf+UifCNFOwByRS3PzPVKWzNU8EuDTUfpUCTQKuU1qmu+jx9moBi8bhkXh7kGOZqv95L7UATZ/Ql/F5S53oH1E6+iEPR2vn83XNHXzCeHuPED2MMugL85KCweMvG5v9fOf6z4ovknR+dOl5FnMPAoGBAKUKyAdJjnrYd5CBCg4TZwUkRloqBa0WZOJgpr8sLV0JHS244pkqrfYDsmu7TLBQMgs6VilOfeXfRFzvnC0GGRZQOjJ3eNCsr3GYmbcPC0Qa5c3sO1SfLNT7cT/c1fQEPzhYKZWvEQO5GWOeaydmBppFZP1MDO0Hn+n1bPQmf2uxAoGBAK0Dd6M+ci5LCkQUGnfwR56HGEEvZLbeh4NamGWG0qg7x8wjHykgg7EF52XTFG60LikvVt2Y9O8lj4Xy2U5JL1kCwcwxp1f1horHSZAEOf5Kh+y/r+YuhzM676xKGxP5AUl7R3hHCjYMaXHuFm713yUaVRfzumdpJmLl7vyNoqXBAoGATG1CDbTdDX/9Pq7RI34by/16IKropqYeb8rWINtp08sIqGYo68EGohP5SDbeyP12pG4idV+6IsY8twv5bz/uhG/HWXQOeGWea8d2lcxQnfirlOVkfdux7CJisdFX4ANcwKNGWrvreFwRch44ZjnT7O4vlQ+ETzb4KXiHFmvjY9A=\n-----END RSA PRIVATE KEY-----'
+      })
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(res => {
+      document.getElementById('token').innerHTML = res.jwt;
+    })
+    .catch(err => {
+      console.error(`Error: ${err}`);
+    });
+  });
+  
+  document.getElementById('init-login').addEventListener('click', () => {
+    document.getElementById('login-code').className = 'visible'
+    turn_all_cards_off();
+    document.getElementById('step2').className = 'card-header bg-success border-success p-1'
+  });
+  
+  document.getElementById('gen-response').addEventListener('click', async _ => {
+    fetch('/demo/oidc')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('oidc').innerHTML = JSON.stringify(data, null, '<br>');
+      document.getElementById('oidc-card').className = 'visible';
+      turn_all_cards_off();
+      document.getElementById('step3').className = 'card-header bg-success border-success p-1'
+    })
+    .catch(err => {
+      console.error(`Error: ${err}`);
+    });
+  });
+  
+  let request_object = { 
+    nonce: 'oNa1yWsS8erQA2iYqYzEi4pbP',
+    iat: 1564506231,
+    exp: 1564506291,
+    iss: 'https://demo.moodle.net',
+    aud: 'uuYLGWBmhhuZvBf',
+    'https://purl.imsglobal.org/spec/lti/claim/deployment_id': '2',
+    'https://purl.imsglobal.org/spec/lti/claim/target_link_uri': 'https://node-lti-v1p3.herokuapp.com/',
+    sub: '9',
+    'https://purl.imsglobal.org/spec/lti/claim/roles':
+     [ 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner' ],
+    'https://purl.imsglobal.org/spec/lti/claim/context':
+     { id: '47',
+       label: 'AGILE200',
+       title: 'Internship',
+       type: [ 'CourseSection' ] },
+    'https://purl.imsglobal.org/spec/lti/claim/resource_link': { title: 'Test LTI for Team Pied Piper', id: '4' },
+    given_name: 'John',
+    family_name: 'Smith',
+    name: 'John Smith',
+    'https://purl.imsglobal.org/spec/lti/claim/ext':
+     { user_username: 'john.smith@gmail.com', lms: 'moodle-2' },
+    email: 'john.smith@gmail.com',
+    'https://purl.imsglobal.org/spec/lti/claim/launch_presentation':
+     { locale: 'en',
+       document_target: 'window',
+       return_url:
+        'https://demo.moodle.net/mod/lti/return.php?course=47&launch_container=4&instanceid=4&sesskey=xcsU4krTwV' },
+    'https://purl.imsglobal.org/spec/lti/claim/tool_platform':
+     { family_code: 'moodle',
+       version: '2019052000.01',
+       guid: 'demo.moodle.net',
+       name: 'Moodle Demo',
+       description: 'Moodle Demo Sandbox' },
+    'https://purl.imsglobal.org/spec/lti/claim/version': '1.3.0',
+    'https://purl.imsglobal.org/spec/lti/claim/message_type': 'LtiResourceLinkRequest',
+    'https://purl.imsglobal.org/spec/lti-ags/claim/endpoint':
+     { scope:
+        [ 'https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly',
+          'https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly',
+          'https://purl.imsglobal.org/spec/lti-ags/scope/score' ],
+       lineitems:
+        'https://demo.moodle.net/mod/lti/services.php/47/lineitems?type_id=2',
+       lineitem:
+        'https://demo.moodle.net/mod/lti/services.php/47/lineitems/109/lineitem?type_id=2' },
+    'https://purl.imsglobal.org/spec/lti-nrps/claim/namesroleservice':
+     { context_memberships_url:
+        'https://demo.moodle.net/mod/lti/services.php/CourseSection/47/bindings/2/memberships',
+       service_versions: [ '1.0', '2.0' ] }
+  };
+  
+  document.getElementById('send-launch-req').addEventListener('click', () => {
+    document.getElementById('launch-req-code').innerHTML = JSON.stringify(request_object,null,2);
+    document.getElementById('launch-req').className = 'visible';
+    turn_all_cards_off();
+    document.getElementById('step4').className = 'card-header bg-success border-success p-1'
+  });
+  
+  document.getElementById('launch-tool').addEventListener('click', async _ => {
+    fetch('/demo/project/submit')
+    .then(res => {
+      turn_all_cards_off();
+      window.location.href = "/demo/project/submit"; 
+    })
+    .catch(err => {
+      console.error(`Error: ${err}`);
+    });
+  });
+  </script>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Project Submission</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+    }
+
+    table td.fit {
+      white-space: nowrap;
+      width: 1%;
+    }
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    #styling {
+      float: none;
+      margin: 0 auto;
+      padding: 50px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="text-center">
+    <h1>Project Submission Form</h1>
+  </div>
+
+  <div class="text-center">
+    <h3 id='projectName'>
+      <% if ((payload['https://purl.imsglobal.org/spec/lti/claim/context'] != null) && payload['https://purl.imsglobal.org/spec/lti/claim/context'].label != null) { %>
+        <%= payload['https://purl.imsglobal.org/spec/lti/claim/context'].label %>
+      <% } %>
+      <% if (payload['https://purl.imsglobal.org/spec/lti/claim/context'] != null && payload['https://purl.imsglobal.org/spec/lti/claim/context'].title != null) { %>
+        <%= payload['https://purl.imsglobal.org/spec/lti/claim/context'].title %>
+      <% } %>
+    </h3>
+    <h4>
+      <% if (payload.name != null) { %>
+        <%= payload.name %>
+      <% } else { %>
+        <% if (payload.given_name != null) { %>
+          <%= payload.given_name %>
+        <% } %>
+        <% if (payload.family_name != null) { %>
+          <%= payload.family_name %>
+        <% } %>
+      <% } %>
+    </h4>
+  </div>
+
+  <div class="container col-sm-6" id="styling">
+    <form method="POST" action="/project/grading">
+      <div class="form-group">
+        <label>Enter Github URL</label>
+        <input type="url" class="form-control" placeholder="Enter github url here" name="github" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleInputPassword1">Enter Heroku/Now URL</label>
+        <input type="url" class="form-control" placeholder="Enter heroku/now url here" name="heroku" required>
+      </div>
+
+      <hr />
+      <h4 class="mt-5">Submission Status</h4>
+
+      <% if (formData != null && formData.grade != null) { %>
+      <div class="alert alert-success">
+        <strong>Congrats! your project was submitted successfully</strong>
+      </div>
+      <% } else if (formData != null) { %>
+        <div class="alert alert-danger">
+          <strong>Oops! something went wrong.</strong>
+        </div>
+      <% } %>
+
+      <table>
+        <tr>
+          <td>
+            <strong>Github URL:</strong>
+          </td>
+          <td>
+            <% if (formData != null) { %>
+              <%= formData.gitUrl %>
+            <% } %>            
+          </td>
+        </tr>
+
+        <tr>
+          <td class='fit'>
+            <strong>Heroku URL:</strong>
+          </td>
+          <td>
+            <% if (formData != null) { %>
+              <%= formData.heroUrl %>
+            <% } %>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <strong>URL Status:</strong>
+          </td>
+          <td>
+            <% if (formData != null) { %>
+              <%= formData.urlStatus %>
+            <% } %>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <strong>Grade:</strong>
+          </td>
+          <td>
+            <% if (formData != null)  { %>
+              <%= formData.grade %>
+            <% } %>
+          </td>
+        </tr>
+      </table>
+      <br>
+
+      <% if (formData != null) { %>
+        <% if (formData.grade === null) { %>
+          <button type="submit" class="btn btn-primary">Submit</button> 
+          <button type="reset" value="reset" class="btn btn-danger" id="change">Clear</button>
+        <% } %>
+      <% } else { %>
+        <button type="submit" class="btn btn-primary">Submit</button> 
+        <button type="reset" value="reset" class="btn btn-danger" id="change">Clear</button>
+      <% } %>
+
+    </form>
+    
+    <form method="POST" action="/project/return">
+      <% if (formData != null && formData.grade != null) { %>
+        <button type="submit" class="btn btn-primary">Done</button>
+      <% } %>
+
+    </form>
+
+  </div>
+
+  <script>
+
+    var result = $("body");
+    $('#change').click(function () {
+      result.load('/project/submit/');
+    });
+
+  </script>
+</body>
+
+</html>

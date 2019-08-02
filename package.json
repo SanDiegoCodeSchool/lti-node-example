@@ -1,0 +1,25 @@
+{
+  "name": "lti-node-example",
+  "version": "1.0.0",
+  "description": "# Example Tool for LTI 1.3 Compliant NodeJS Library",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "mocha tests/*.spec.js --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanDiegoCodeSchool/lti-node-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SanDiegoCodeSchool/lti-node-example/issues"
+  },
+  "homepage": "https://github.com/SanDiegoCodeSchool/lti-node-example#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "lti-node-library": "0.0.0",
+    "mocha": "^6.2.0"
+  }
+}
