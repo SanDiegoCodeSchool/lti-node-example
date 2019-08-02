@@ -76,6 +76,8 @@ If the URLs are not properly formatted and/or the GitHub URL doesn't launch succ
 
 Finally, when the student clicks Done, the student is returned to the Platform.  The Teacher or Administrator on the Platform should be able to see that a grade has been used for test student for the Example Tool.
 
+Congradulations! You have now created your own Ims-Global Lti v1.3 external tool. You now have the knowledge to build all sorts of external tools without needing to learn the specifications or authorization flow. If you would like to learn more about these processes, you can checkout our demo launch flow below. 
+
 ### B. View the OIDC Tool Launch Flow
 
 The Example Tool repo also contains an illustration of the Authorization flow which occurs within the Library when you drop a Tool into a Platform.  In order to run the example, start the MongoDB and your server by running in separate terminals:
