@@ -87,7 +87,7 @@ Go to `http://localhost:3000/` in your browser.  The example walks through what 
 > 1. Clicking the 'Initiate Tool from LMS' button will generate a properly formatted OIDC Login Request that a Platform would create:
 > ```java
 > { iss: 'https://demo.moodle.net',
->   target_link_uri: 'https://piedpiper.localtunnel.me',
+>   target_link_uri: 'https://localtunnelname.localtunnel.me',
 >   login_hint: '9',
 >   lti_message_hint: '377' }
 > ```
@@ -97,7 +97,7 @@ Go to `http://localhost:3000/` in your browser.  The example walks through what 
 > { 'scope': 'openid', 
 >   'response_type': 'id_token', 
 >   'client_id': 'SDF7ASDLSFDS9', 
->   'redirect_uri': 'https://piedpiper.localtunnel.me', 
+>   'redirect_uri': 'https://localtunnelname.localtunnel.me', 
 >   'login_hint': '9', 
 >   'state': 'vSSRdELr5noUNazBuYmlpYywYBeDlF', 
 >   'response_mode': 'form_post', 
@@ -115,7 +115,7 @@ Go to `http://localhost:3000/` in your browser.  The example walks through what 
 >   iss: 'https://demo.moodle.net',
 >   aud: 'uuYLGWBmhhuZvBf',
 >   'https://purl.imsglobal.org/spec/lti/claim/deployment_id': '2',
->   'https://purl.imsglobal.org/spec/lti/claim/target_link_uri': 'https://piedpiper.localtunnel.me/',
+>   'https://purl.imsglobal.org/spec/lti/claim/target_link_uri': 'https://localtunnelname.localtunnel.me/',
 >   sub: '9',
 >   'https://purl.imsglobal.org/spec/lti/claim/roles':
 >    [ 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner' ],
