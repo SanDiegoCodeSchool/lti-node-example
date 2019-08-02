@@ -14,10 +14,15 @@ To use this repo, clone it to your local machine and run:
 ```
 npm install
 ```
+## WARNING: 
+DO not perform an npm start until prompted to do so in step 6. If you do, you will need to clear your database.
+
 You will also need MongoDB and localtunnel installed.  Instructions to install MongoDB can be found here:
 
 * MacOS - use homebrew: https://docs.mongodb.com/master/tutorial/install-mongodb-on-os-x/
 * Windows - use the installer from here: https://docs.mongodb.com/master/tutorial/install-mongodb-on-windows/
+
+NOTE: have MongoDB up and running before you continue!
 
 Install localtunnel by running:
 ```
@@ -46,7 +51,7 @@ The Example Tool can be dropped into a Platform so that you can experience the L
 - Choose 'Always' Accept grades from the Tool 
 
 4. After clicking `Save changes`, click the Menu icon for the Tool you just added and make note of the Tool Configuration Details
-- Add the Client ID from this information to the server.js file on the 3rd line of the object for `registerPlatform` for demo.moodle.net
+- Replace the Client ID from this information to the server.js file on line 58. Additionally, replace line 61 with your localtunnel URL + "/project/submit"
 
 5. Back in the Moodle sandbox, click `Dashboard` and click any of the demo courses.  Use the Gear icon to `Turn editing on`.  You will then be able to `Add an Activty or Resource` for an `External Tool`.  Simply give it a name and select the Tool you added above from the drop down box for `Preconfigured tool`.  Click `Save and return to course`.
 
