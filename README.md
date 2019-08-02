@@ -37,10 +37,10 @@ The Example Tool can be dropped into a Platform so that you can experience the L
 
 3. Click `configure a tool manually` and, at minimum, add:
 - Tool's Name
-- Tool's Base URL:  https://piedpiper.localtunnel.me
+- Tool's Base URL:  https://<localtunnelname>.localtunnel.me
 - Mark the tool as a 'LTI1.3' Tool
-- Initiate Login URL - https://piedpiper.localtunnel.me/oidc
-- Redirection URIs - https://piedpiper.localtunnel.me/project/submit
+- Initiate Login URL - https://<localtunnelname>.localtunnel.me/oidc
+- Redirection URIs - https://<localtunnelname>.localtunnel.me/project/submit
 - Enable Assignment and Grade Services
 - Enable sharing of launcher's name
 - Choose 'Always' Accept grades from the Tool 
@@ -52,7 +52,7 @@ The Example Tool can be dropped into a Platform so that you can experience the L
 
 6. Run localtunnel, MongoDB, and your server in separate terminals:
 ```
-lt --port 3000 --subdomain piedpiper
+lt --port 3000 --subdomain <localtunnelname>
 mongod
 npm start
 ```
