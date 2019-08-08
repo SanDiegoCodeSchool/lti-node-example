@@ -60,7 +60,7 @@ mongod
 npm start
 ```
 
-7. After you have started the server, the command line should log that your platform has been registered. Before continuing, open a new tab in your browser and navigate to your local tunnel url + "/pubickey/moodle". This webpage produces a public key that you MUST add to your previously configured tool settings under the public key input. **BE SURE TO COPY EVERYTHING INBETWEEN THE QUOTATIONS ON THIS WEBPAGE.**
+7. After you have started the server, the command line should log that your platform has been registered. Before continuing, open a new tab in your browser and navigate to your local tunnel url + "/publickey/moodle". This webpage produces a public key that you MUST add to your previously configured tool settings under the public key input. **BE SURE TO COPY EVERYTHING INBETWEEN THE QUOTATIONS ON THIS WEBPAGE.**
 
 8. In the upper right corner of the Moodle sandbox, switch your role to Student, and then click on the Tool you just added to the course you chose.  The Example Tool will now display.
  
