@@ -20,6 +20,6 @@
   "dependencies": {
     "chai": "^4.2.0",
     "lti-node-library": "0.0.0",
-    "mocha": "^6.2.0"
+    "mocha": "^10.2.0"
   }
 }
